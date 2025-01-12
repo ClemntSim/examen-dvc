@@ -1,0 +1,40 @@
+stages:
+  importation_data:
+    cmd: python src/data/import_raw_data.py
+    deps:
+    - src/data/import_raw_data.py
+    outs:
+    - data/raw_data
+  clean_data:
+    cmd: python src/data/make_dataset.py
+    deps:
+    - data/raw_data
+    - src/data/make_dataset.py
+    outs:
+    - data/processed_data
+  selection_best_param:
+    cmd: python src/models/best_model.py
+    deps:
+    - data/processed_data
+    - src/models/best_model.py
+    outs:
+    - models/lasso_best_model.pkl
+  entrainement_model:
+    cmd: python src/models/train_model.py
+    deps:
+    - data/processed_data
+    - models/lasso_best_model.pkl
+    - src/models/train_model.py
+    outs:
+    - models/trained_model.joblib
+  prediction_model:
+    cmd: python src/models/predict_model.py
+    deps:
+    - data/processed_data
+    - models/trained_model.joblib
+    - src/models/predict_model.py
+    outs:
+    - data/prediction.csv
+    metrics:
+    - metrics/scores.json:
+        cache: false
