@@ -11,7 +11,10 @@ stages:
     - data/raw_data
     - src/data/make_dataset.py
     outs:
-    - data/processed_data
+    - data/processed_data/X_train.csv
+    - data/processed_data/X_test.csv
+    - data/processed_data/y_train.csv
+    - data/processed_data/y_test.csv
   selection_best_param:
     cmd: python src/models/best_model.py
     deps:
