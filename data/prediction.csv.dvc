@@ -1,0 +1,5 @@
+outs:
+- md5: 0c623d01b8a956dc4de55ec9343ce959
+  size: 19783
+  hash: md5
+  path: prediction.csv
