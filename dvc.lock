@@ -1,0 +1,107 @@
+schema: '2.0'
+stages:
+  importation_data:
+    cmd: python src/data/import_raw_data.py
+    deps:
+    - path: src/data/import_raw_data.py
+      hash: md5
+      md5: 2fed45f780f86c50e1f87f642f01aa61
+      size: 1778
+    outs:
+    - path: data/raw_data
+      hash: md5
+      md5: 41dee78430cbebe25be9986bbb599d4a.dir
+      size: 333757
+      nfiles: 1
+  clean_data:
+    cmd: python src/data/make_dataset.py
+    deps:
+    - path: data/raw_data
+      hash: md5
+      md5: 41dee78430cbebe25be9986bbb599d4a.dir
+      size: 333757
+      nfiles: 1
+    - path: src/data/make_dataset.py
+      hash: md5
+      md5: 4a933bdeec0ea75f8d081f609bc7dda4
+      size: 2684
+    outs:
+    - path: data/processed_data/X_test.csv
+      hash: md5
+      md5: 09a9003b0cc6cb2152f4e2a09f7e28a6
+      size: 85441
+    - path: data/processed_data/X_train.csv
+      hash: md5
+      md5: 1c7f7f7d6304382c81d204c6af195f02
+      size: 198678
+    - path: data/processed_data/y_test.csv
+      hash: md5
+      md5: e064ea83fe860a49b9e9cfab1e8ec5a7
+      size: 9697
+    - path: data/processed_data/y_train.csv
+      hash: md5
+      md5: 4f1097f0b9053f0a94904c047541877f
+      size: 22710
+  selection_best_param:
+    cmd: python src/models/best_model.py
+    deps:
+    - path: data/processed_data
+      hash: md5
+      md5: abfa79937aff8b6f45d481dd7b22ba18.dir
+      size: 316526
+      nfiles: 4
+    - path: src/models/best_model.py
+      hash: md5
+      md5: bde882b3d065b61c6f5357724ff487ac
+      size: 1944
+    outs:
+    - path: models/lasso_best_model.pkl
+      hash: md5
+      md5: 00b3303779160e4f7104c844a79dbf54
+      size: 32
+  entrainement_model:
+    cmd: python src/models/train_model.py
+    deps:
+    - path: data/processed_data
+      hash: md5
+      md5: abfa79937aff8b6f45d481dd7b22ba18.dir
+      size: 316526
+      nfiles: 4
+    - path: models/lasso_best_model.pkl
+      hash: md5
+      md5: 00b3303779160e4f7104c844a79dbf54
+      size: 32
+    - path: src/models/train_model.py
+      hash: md5
+      md5: 8592eb5b77ce9ec50d26dcc07190020d
+      size: 753
+    outs:
+    - path: models/trained_model.joblib
+      hash: md5
+      md5: 1d6a817c478ce68289ffa69065e7d7e9
+      size: 1143
+  prediction_model:
+    cmd: python src/models/predict_model.py
+    deps:
+    - path: data/processed_data
+      hash: md5
+      md5: abfa79937aff8b6f45d481dd7b22ba18.dir
+      size: 316526
+      nfiles: 4
+    - path: models/trained_model.joblib
+      hash: md5
+      md5: 1d6a817c478ce68289ffa69065e7d7e9
+      size: 1143
+    - path: src/models/predict_model.py
+      hash: md5
+      md5: 491b6f382a958587ddc44ec80f417876
+      size: 1203
+    outs:
+    - path: data/prediction.csv
+      hash: md5
+      md5: 0c623d01b8a956dc4de55ec9343ce959
+      size: 19783
+    - path: metrics/scores.json
+      hash: md5
+      md5: 27da75e06e08f5b29acc76e534efb8d8
+      size: 54
